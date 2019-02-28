@@ -28,7 +28,7 @@ RSpec.describe Tilt::JsonFactoryTemplate do
       end
     end
 
-    xcontext 'of a simple template with an execution context' do
+    context 'of a simple template with an execution context' do
       let(:template_path) { File.join(templates_path, 'simple_scope.jfactory') }
       let(:scope) do
         instance = Object.new

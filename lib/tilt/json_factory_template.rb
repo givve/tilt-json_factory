@@ -12,7 +12,10 @@ module Tilt
     end
 
     def render(scope=nil, locals={}, &block)
-      ::JSONFactory.build(@data, locals)
+      buffer = StringIO.new
+      builder = ::Tilt::JSONFactory::JSONBuilder.new(buffer)
+      builder.evaluate(@data, scope, locals, @file)
+      buffer.string
     end
   end
 
