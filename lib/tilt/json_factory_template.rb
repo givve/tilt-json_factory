@@ -14,7 +14,7 @@ module Tilt
     def render(scope=nil, locals={}, &block)
       buffer = StringIO.new
       builder = ::Tilt::JSONFactory::JSONBuilder.new(buffer)
-      builder.evaluate(@data, scope, locals, @file, @line)
+      builder.evaluate(@data, scope, locals, @file, @line, &block)
       buffer.string
     end
   end

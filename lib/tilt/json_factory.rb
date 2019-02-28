@@ -8,18 +8,27 @@ require_relative 'json_factory_template'
 module Tilt
   module JSONFactory
     class JSONBuilder < ::JSONFactory::JSONBuilder
-      def evaluate(template_string, scope, local_variables, filename, linenumber)
-        context = build_execution_context(scope, local_variables)
+      EMBEDABLE_VARIABLE_NAME = '__content__'
+
+      def evaluate(template_string, scope, local_variables, filename, linenumber, &block)
+        context = build_execution_context(scope, local_variables, &block)
         eval(template_string, context, filename, linenumber) # rubocop:disable Security/Eval
       end
 
-      def build_execution_context(scope, locals)
+      def build_execution_context(scope, locals, &block)
         dsl = ::JSONFactory::DSL.new(self)
         binding = jfactory(scope, dsl) 
         locals.each_pair do |key, value|
           binding.local_variable_set(key, value)
         end
         binding.local_variable_set(BUILDER_VARIABLE_NAME, dsl)
+        # HACK: allows the use of layouts. However since layouts usually call
+        #       yield to embed the actual view content, we'd have to monkey
+        #       patch each and every dsl method to receive an optional embeddable
+        #       block.
+        #       This allows us to just change one place to set the content to
+        #       be embedded for templates that are used as layouts.
+        binding.local_variable_set(EMBEDABLE_VARIABLE_NAME, block.call) if block
         binding
       end
     end

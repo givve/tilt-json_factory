@@ -40,5 +40,17 @@ RSpec.describe Tilt::JsonFactoryTemplate do
         expect(template.render(scope)).to eq('Hello World'.to_json)
       end
     end
+
+    context 'with content yielding' do
+      let(:template_path) { File.join(templates_path, 'with_yield.jfactory') }
+
+      it 'works' do
+        output = template.render do
+          'Hello World'
+        end
+
+        expect(output).to eq('Hello World'.to_json)
+      end
+    end
   end
 end
