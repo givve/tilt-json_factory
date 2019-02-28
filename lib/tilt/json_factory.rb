@@ -8,9 +8,9 @@ require_relative 'json_factory_template'
 module Tilt
   module JSONFactory
     class JSONBuilder < ::JSONFactory::JSONBuilder
-      def evaluate(template_string, scope, local_variables, filename)
+      def evaluate(template_string, scope, local_variables, filename, linenumber)
         context = build_execution_context(scope, local_variables)
-        eval(template_string, context, filename) # rubocop:disable Security/Eval
+        eval(template_string, context, filename, linenumber) # rubocop:disable Security/Eval
       end
 
       def build_execution_context(scope, locals)
