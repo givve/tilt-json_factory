@@ -1,0 +1,4 @@
+object do
+  member :foo, foo
+  member :bar, bar
+end

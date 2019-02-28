@@ -1,4 +1,12 @@
-require_relative '../lib/tilt'
+# frozen_string_literal: true
+
+require 'bundler'
+Bundler.setup
+
+require 'byebug'
+require_relative '../lib/tilt/json_factory'
+
+FIXTURE_PATH = File.join(__dir__, 'fixtures')
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
-
-module Tilt
-  module JsonFactory
-  end
-end
+require 'tilt'
+require 'json_factory'
 
 require_relative 'json_factory/version'
+require_relative 'json_factory_template'
