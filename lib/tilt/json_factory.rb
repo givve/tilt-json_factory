@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Tilt
-  module JSONFactory
+  module JsonFactory
   end
 end
 
