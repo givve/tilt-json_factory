@@ -7,6 +7,8 @@ require_relative 'json_factory_template'
 
 module Tilt
   module JSONFactory
+    class TypeNotAllowedError < ::JSONFactory::TypeNotAllowedError; end
+
     class DSL < ::JSONFactory::DSL
       def json(value)
         @builder.json(value)
@@ -17,7 +19,6 @@ module Tilt
       EMBEDABLE_VARIABLE_NAME = '__content__'
 
       def json(value)
-        raise TypeNotAllowedError, 'Cannot add multiple json fragments' unless count.zero?
         io << value
         increment_count
       end
