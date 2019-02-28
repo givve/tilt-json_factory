@@ -52,5 +52,14 @@ RSpec.describe Tilt::JsonFactoryTemplate do
         expect(output).to eq('Hello World'.to_json)
       end
     end
+
+    context 'with json tag' do
+      let(:template_path) { File.join(templates_path, 'with_json.jfactory') }
+      let(:json) { 'Hello World'.to_json }
+
+      it 'works' do
+        expect(template.render(nil, fragment: json)).to eq(json) 
+      end
+    end
   end
 end

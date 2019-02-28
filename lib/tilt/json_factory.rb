@@ -7,8 +7,20 @@ require_relative 'json_factory_template'
 
 module Tilt
   module JSONFactory
+    class DSL < ::JSONFactory::DSL
+      def json(value)
+        @builder.json(value)
+      end
+    end
+
     class JSONBuilder < ::JSONFactory::JSONBuilder
       EMBEDABLE_VARIABLE_NAME = '__content__'
+
+      def json(value)
+        raise TypeNotAllowedError, 'Cannot add multiple json fragments' unless count.zero?
+        io << value
+        increment_count
+      end
 
       def evaluate(template_string, scope, local_variables, filename, linenumber, &block)
         context = build_execution_context(scope, local_variables, &block)
@@ -16,7 +28,7 @@ module Tilt
       end
 
       def build_execution_context(scope, locals, &block)
-        dsl = ::JSONFactory::DSL.new(self)
+        dsl = DSL.new(self)
         binding = jfactory(scope, dsl) 
         locals.each_pair do |key, value|
           binding.local_variable_set(key, value)
