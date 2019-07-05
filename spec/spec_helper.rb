@@ -3,6 +3,13 @@
 require 'bundler'
 Bundler.setup
 
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter '/spec/'
+  add_group 'Lib', 'lib'
+end
+
 require 'byebug'
 require_relative '../lib/tilt/json_factory'
 
