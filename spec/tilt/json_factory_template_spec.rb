@@ -19,7 +19,7 @@ RSpec.describe Tilt::JsonFactoryTemplate do
     context 'of a simple template with locals' do
       let(:template_path) { File.join(templates_path, 'simple_locals.jfactory') }
       let(:locals) do
-        { foo: 'foo', 
+        { foo: 'foo',
           bar: 'bar' }
       end
 
@@ -58,7 +58,7 @@ RSpec.describe Tilt::JsonFactoryTemplate do
       let(:json) { 'Hello World'.to_json }
 
       it 'works' do
-        expect(template.render(nil, fragment: json)).to eq(json) 
+        expect(template.render(nil, fragment: json)).to eq(json)
       end
     end
   end

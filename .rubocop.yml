@@ -1,0 +1,151 @@
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+  - vendor/**/*
+  - bin/**/*
+  - gemfiles/**/*
+  - tmp/**/*
+  - db/seeds.rb
+  - exe/**/*
+
+### Bundler ###
+# Allow gems to be grouped by purpose
+Bundler/OrderedGems:
+  Enabled: false
+
+### Layout ###
+
+Layout/AlignHash:
+  Enabled: false
+
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+
+Layout/IndentFirstArrayElement:
+  EnforcedStyle: consistent
+
+# see: https://github.com/rubocop-hq/rubocop/issues/4222
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+  - spec/**/*
+
+### Metrics ###
+
+Metrics/AbcSize:
+  Max: 40
+
+Metrics/BlockLength:
+  Max: 150
+  Exclude:
+  - spec/**/*
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/CyclomaticComplexity:
+  Max: 19
+
+Metrics/LineLength:
+  Max: 378
+
+Metrics/MethodLength:
+  Max: 59
+
+Metrics/PerceivedComplexity:
+  Max: 41
+
+### Naming ###
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+
+### Style ###
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockComments:
+  Enabled: false
+
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+Style/CommandLiteral:
+  EnforcedStyle: percent_x
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyElse:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/InverseMethods:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/NilComparison:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+  MinDigits: 7
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/PreferredHashMethods:
+  Enabled: false
+
+Style/RandomWithOffset:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Style/RescueModifier:
+  Exclude:
+    - spec/**/*
+
+Style/SignalException:
+  EnforcedStyle: semantic
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Style/SymbolProc:
+  Enabled: true
+
+Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/TrivialAccessors:
+  Enabled: false
+
+Style/ZeroLengthPredicate:
+  Enabled: false

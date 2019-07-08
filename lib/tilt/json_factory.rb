@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'tilt'
 require 'json_factory'
 
@@ -23,14 +24,14 @@ module Tilt
         increment_count
       end
 
-      def evaluate(template_string, scope, local_variables, filename, linenumber, &block)
+      def evaluate(template_string, scope, local_variables, filename, linenumber, &block) # rubocop:disable Metrics/ParameterLists
         context = build_execution_context(scope, local_variables, &block)
         eval(template_string, context, filename, linenumber) # rubocop:disable Security/Eval
       end
 
       def build_execution_context(scope, locals, &block)
         dsl = DSL.new(self)
-        binding = jfactory(scope, dsl) 
+        binding = jfactory(scope, dsl)
         locals.each_pair do |key, value|
           binding.local_variable_set(key, value)
         end
@@ -47,10 +48,10 @@ module Tilt
     end
   end
 end
-    
+
 Tilt::JSONFactory::JSONBuilder.class_eval do
   # Returns an empty evaluation context, similar to Ruby's main object.
-  def jfactory(scope, __dsl__)
+  def jfactory(scope, __dsl__) # rubocop:disable Lint/UnderscorePrefixedVariableName
     (scope || Object.allocate).instance_eval do
       class << self
         JSONFactory.configure.helpers.each { |mod| include mod }
@@ -65,16 +66,16 @@ Tilt::JSONFactory::JSONBuilder.class_eval do
         __dsl__
       end
 
-      def method_missing(method_name, *args, &block)
+      def method_missing(method_name, *args, &block) # rubocop:disable Style/MissingRespondToMissing
         if __dsl__.respond_to?(method_name)
           __dsl__.send(method_name, *args, &block)
         else
           super
         end
       end
-      
+
       return binding
     end
   end
-  private :jfactory
+  private :jfactory # rubocop:disable Style/AccessModifierDeclarations
 end
