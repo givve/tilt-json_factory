@@ -15,14 +15,17 @@ Bundler/OrderedGems:
 
 ### Layout ###
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: false
 
 Layout/EmptyLinesAroundExceptionHandlingKeywords:
   Enabled: false
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
+
+Layout/LineLength:
+  Max: 378
 
 # see: https://github.com/rubocop-hq/rubocop/issues/4222
 Lint/AmbiguousBlockAssociation:
@@ -44,9 +47,6 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Max: 19
-
-Metrics/LineLength:
-  Max: 378
 
 Metrics/MethodLength:
   Max: 59
@@ -73,9 +73,6 @@ Style/AsciiComments:
 Style/BlockComments:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 Style/CommandLiteral:
   EnforcedStyle: percent_x
 
@@ -96,6 +93,15 @@ Style/FormatStringToken:
 
 Style/GuardClause:
   Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
 
 Style/IfUnlessModifier:
   Enabled: false
