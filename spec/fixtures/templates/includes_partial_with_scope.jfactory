@@ -1,0 +1,5 @@
+object do
+  member :foo, foo
+  byebug
+  partial File.join(__dir__, 'includes_partial_with_scope_partial'), bar: bar
+end

@@ -29,6 +29,30 @@ module Tilt
         eval(template_string, context, filename, linenumber) # rubocop:disable Security/Eval
       end
 
+      def partial(filename, local_variables)
+        template = @template_store.get(filename)
+
+        # NOTE: The nil below would ideally include the scope of the template
+        #       calling partial, so that the top level build context is available
+        #       to the partial.
+        #       However the method_missing trampoline in the __dsl__ instance
+        #       prevents us from accessing the calling templates bindings.
+        #       Alternatively if we store the context after creation in this class,
+        #       the context would ideally need to be a stack that is re-merged into
+        #       a concrete context on each partial invocation. Otherwise we'd
+        #       either not be enriching the context with binding modifications
+        #       (e.g. variable assignments) of the calling templates, or we'd
+        #       be leaking inner partial binding modifications to the calling
+        #       templates on the way back up the stack.
+        #       The required effort is currently in no real proportion to the
+        #       gain, since we're not currently using these features.
+        #
+        #       So for now, we'll just pass a nil scope and partials will need
+        #       to be explicitly fed with locals on which to operate.
+        #       (sr 2020-02-19)
+        evaluate(template, nil, local_variables, filename, 0)
+      end
+
       def build_execution_context(scope, locals, &block)
         dsl = DSL.new(self)
         binding = jfactory(scope, dsl)
