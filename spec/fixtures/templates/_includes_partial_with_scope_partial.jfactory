@@ -1,0 +1,2 @@
+member :bar, bar
+member :hello_world, @hello_world

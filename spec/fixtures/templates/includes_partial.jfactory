@@ -1,0 +1,4 @@
+object do
+  member :foo, foo
+  partial File.join(__dir__, 'includes_partial_partial'), bar: bar
+end
