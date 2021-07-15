@@ -1,25 +1,50 @@
-version: 2 # use CircleCI 2.0
-jobs: # a collection of steps
-  build: # runs not using Workflows must have a `build` job as entry point
-    docker: # run the steps with Docker
-      - image: circleci/ruby:2.6.3-stretch # ...with this image as the primary container; this is where all `steps` will run
-        environment: # environment variables for primary container
-          BUNDLE_JOBS: 3
-          BUNDLE_RETRY: 3
-          BUNDLE_PATH: vendor/bundle
-    steps: # a collection of executable commands
-      - checkout # special step to check out source code to working directory
+version: 2.1
 
-      # Which version of bundler?
-      - run:
-          name: Install bundler v2
-          command: gem install bundler --version=2.0.1
+orbs:
+  ruby: circleci/ruby@1.1
 
+jobs:
+  checks:
+    docker:
+      - image: circleci/ruby:2.7.4
+    steps:
+      - checkout
       # Restore bundle cache
       # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
       - restore_cache:
           keys:
             - gem-cache-v1-{{ checksum "tilt-json_factory.gemspec" }}
+
+      - run: # Install Ruby dependencies
+          name: Bundle Install
+          command: bundle check || bundle config gem.givve.io ${PRIVATE_GEM_SERVER_USER}:${PRIVATE_GEM_SERVER_PASS} && bundle install
+
+      # Store bundle cache for Ruby dependencies
+      - save_cache:
+          key: gem-cache-v1-{{ checksum "tilt-json_factory.gemspec" }}
+          paths:
+            - vendor/bundle
+      - ruby/rubocop-check
+    
+  run_specs:
+    parameters:
+      docker_image:
+        type: string
+    docker:
+      - image: circleci/<< parameters.docker_image >>
+    steps:
+      - checkout
+      - run:                                                                    
+          name: Setup CodeClimate Test Reporter                                 
+          command: |                                                            
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter                                         
+      # Restore bundle cache
+      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+      - restore_cache:
+          keys:
+            - gem-cache-v1-{{ checksum "tilt-json_factory.gemspec" }}
+
       - run: # Install Ruby dependencies
           name: Bundle Install
           command: bundle check || bundle config gem.givve.io ${PRIVATE_GEM_SERVER_USER}:${PRIVATE_GEM_SERVER_PASS} && bundle install
@@ -30,10 +55,26 @@ jobs: # a collection of steps
           paths:
             - vendor/bundle
       - run:
-          name: Run rubocop
-          command: bundle exec rubocop
-      - run:
           name: Run rspec
-          command: bundle exec rspec
+          command: |                                                            
+            # ./cc-test-reporter before-build                                     
+            bundle exec rspec                                                   
+            # ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
       - store_artifacts:
           path: coverage
+
+workflows:
+  all_jobs:
+    jobs:
+      - checks:
+          context: 
+          - givve_gem_server
+      - run_specs:
+          context:
+            - givve_gem_server
+          matrix:
+            parameters:
+              docker_image: 
+                - ruby:2.7.3
+                - ruby:2.7.4
+                - ruby:3.0.2

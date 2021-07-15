@@ -101,5 +101,5 @@ Tilt::JSONFactory::JSONBuilder.class_eval do
       return binding
     end
   end
-  private :jfactory # rubocop:disable Style/AccessModifierDeclarations
+  private :jfactory
 end
